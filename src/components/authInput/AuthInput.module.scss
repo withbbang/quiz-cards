@@ -1,0 +1,41 @@
+.inputDiv {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 30px;
+  position: relative;
+
+  > span {
+    margin-right: auto;
+  }
+
+  > input {
+    height: 20px;
+    box-sizing: border-box;
+  }
+
+  > input:disabled {
+    border: none;
+  }
+
+  .search {
+    display: flex;
+    align-items: center;
+    position: absolute;
+    right: 3px;
+    cursor: pointer;
+  }
+}
+
+@include mobile {
+  .inputDiv {
+    flex-direction: column;
+    align-items: unset;
+    justify-self: unset;
+
+    > span {
+      margin-bottom: 5px;
+    }
+  }
+}

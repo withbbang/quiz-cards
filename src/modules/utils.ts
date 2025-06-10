@@ -1,3 +1,6 @@
+import { initializeApp } from 'firebase/app';
+import { getAuth } from 'firebase/auth';
+import { getFirestore } from 'firebase/firestore';
 import {
   CustomWindow,
   TypeJavascriptInterface,
@@ -18,6 +21,28 @@ import {
   ServiceUnavailableError,
   UnauthorizedError,
 } from './customErrorClasses';
+
+/**
+ * firebase 초기화
+ */
+export const app = initializeApp({
+  apiKey: process.env.REACT_APP_FIREBASE_APP_KEY,
+  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.REACT_APP_FIREBASE_APP_ID,
+});
+
+/**
+ * firebase 인가 가져오기
+ */
+export const auth = getAuth(app);
+
+/**
+ * firebase 객체 가져오기
+ */
+export const db = getFirestore(app);
 
 /**
  * [API 상태 코드에 따른 에러 발생 함수]
@@ -295,5 +320,81 @@ export function handleConvertDateFormat(date: Date, format: string): string {
       )}`;
     default:
       return '';
+  }
+}
+
+/**
+ * timestamp를 원하는 형식으로 반환 함수
+ *
+ * @param {string} timestamp
+ * @param {string} format
+ * @returns {string}
+ */
+export function handleConvertTimestamp(
+  timestamp: string,
+  format: string,
+): string {
+  const date = new Date(timestamp);
+
+  switch (format) {
+    case 'yyyy-MM-dd':
+      return `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(
+        2,
+        '0',
+      )}-${`${date.getDate()}`.padStart(2, '0')}`;
+    case 'yyyyMMdd':
+      return `${date.getFullYear()}${`${date.getMonth() + 1}`.padStart(
+        2,
+        '0',
+      )}${`${date.getDate()}`.padStart(2, '0')}`;
+    case 'yyyyMMddhhmmss':
+      const handleSetPadZero = (value: number) =>
+        value < 10 ? `0${value}` : value;
+      return `${date.getFullYear()}${handleSetPadZero(
+        date.getMonth() + 1,
+      )}${handleSetPadZero(date.getDate())}${handleSetPadZero(
+        date.getHours(),
+      )}${handleSetPadZero(date.getMinutes())}${handleSetPadZero(
+        date.getSeconds(),
+      )}`;
+    default:
+      return '';
+  }
+}
+
+/**
+ * 문자열 첫번째 글자만 대문자로 변환시키는 함수
+ * @param {string} value 변환될 값
+ * @returns {string} 변환된 값
+ */
+export function handleSetUpperCaseFirstCharacter(value: string): string {
+  return value.replace(/^[a-z]/, (char) => char.toUpperCase());
+}
+
+/**
+ * 이메일 포맷 검증 함수
+ * @param {string} email 이메일
+ * @returns {boolean}
+ */
+export function handleCheckEmail(email: string): boolean {
+  // eslint-disable-next-line
+  return /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9\-]+\.[A-za-z0-9\-]+/.test(email);
+}
+
+/**
+ * 빈 파라미터 체크 함수
+ * @param params 검사할 파라미터
+ * @param cb 성공시 콜백 함수
+ */
+export function handleCheckEmpty(params: any, cb: Function) {
+  if (
+    params !== undefined &&
+    params !== null &&
+    params !== ''
+    // params === false &&
+    // params === 0 &&
+    // Number.isNaN(params)
+  ) {
+    cb();
   }
 }

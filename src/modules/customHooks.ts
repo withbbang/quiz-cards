@@ -68,6 +68,26 @@ export function useChangeHook(keyValueForm: TypeKeyValueForm) {
 }
 
 /**
+ * 엔터 눌렀을 때 특정 콜백이 동작하도록 하는 동작할 함수
+ * @param {any} value 변하는 key - value 객체
+ * @param {function} cb 엔터 눌렀을 때 콜백
+ * @returns
+ */
+export function useEnterKeyDownHook(value: any, cb: () => any) {
+  const useEnterKeyDown = useCallback(
+    (e: React.KeyboardEvent<HTMLInputElement>) => {
+      if (e.key === 'Enter' && !e.nativeEvent.isComposing) {
+        e.currentTarget.blur();
+        cb();
+      }
+    },
+    [value],
+  );
+
+  return useEnterKeyDown;
+}
+
+/**
  * [catch 절 처리 커스텀 훅]
  *
  * @returns
