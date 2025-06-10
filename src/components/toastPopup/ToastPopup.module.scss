@@ -1,0 +1,41 @@
+.toast_pop {
+  position: fixed;
+  bottom: 10%;
+  left: 5%;
+  padding: 20px 0;
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 5px;
+  width: 90%;
+  text-align: center;
+  z-index: 999999;
+
+  &.fadeIn {
+    animation: fadeIn 0.5s linear;
+  }
+
+  &.fadeOut {
+    animation: fadeOut 0.5s linear;
+  }
+
+  .toast_txt {
+    color: #fff;
+  }
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
