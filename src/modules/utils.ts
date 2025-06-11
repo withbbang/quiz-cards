@@ -1,6 +1,7 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
+import { createBrowserHistory } from '@remix-run/router';
 import {
   CustomWindow,
   TypeJavascriptInterface,
@@ -43,6 +44,8 @@ export const auth = getAuth(app);
  * firebase 객체 가져오기
  */
 export const db = getFirestore(app);
+
+export const history = createBrowserHistory();
 
 /**
  * [API 상태 코드에 따른 에러 발생 함수]

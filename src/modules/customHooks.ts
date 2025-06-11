@@ -476,6 +476,35 @@ export function useNormalConfirmPopupHook({
 }
 
 /**
+ * [팝업 초기화 커스텀 훅]
+ *
+ * @returns
+ */
+export function useInitPopupHook() {
+  const dispatch = useDispatch();
+
+  const useInitPopup = useCallback(() => {
+    dispatch(useSetIsConfirmPopupActive({ isConfirmPopupActive: false }));
+    dispatch(useSetMessage({ message: '' }));
+    dispatch(useSetConfirmBtnText({ confirmBtnText: '' }));
+    dispatch(useSetCancelBtnText({ cancelBtnText: '' }));
+    dispatch(useSetConfirmBtnCb({}));
+    dispatch(useSetCancelBtnCb({}));
+
+    dispatch(useSetIsInfoPopupActive({ isInfoPopupActive: false }));
+    dispatch(useSetInfoMessage({ infoMessage: '' }));
+    dispatch(useSetInfoBtnText({ infoBtnText: '' }));
+    dispatch(useSetInfoBtnCb({}));
+
+    dispatch(useSetIsErrorPopupActive({ isErrorPopupActive: false }));
+    dispatch(useSetErrorMessage({ errorMessage: '' }));
+    dispatch(useSetErrorBtnCb({}));
+  }, []);
+
+  return useInitPopup;
+}
+
+/**
  * [Javascript Interface 에러팝업 처리용 Hook]
  */
 export function useJavascriptInterfaceHook() {

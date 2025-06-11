@@ -1,78 +1,20 @@
-import React, { useEffect } from 'react';
-import { CommonState } from 'middlewares/reduxToolkits/commonSlice';
-import { CustomWindow } from 'modules/types';
-import {
-  usePostDataByConfirmPopupHook,
-  usePostDataHook,
-} from 'modules/customHooks';
-import { handleParseDataFromJSInterface } from 'modules/utils';
-import { ToastError } from 'modules/customErrorClasses';
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useSignOut } from 'modules/firebaseHooks';
+import { AuthState } from 'middlewares/reduxToolkits/authSlice';
 import IndexPT from './IndexPT';
 
-function IndexCT({}: IndexCTProps): React.JSX.Element {
-  const { useSetActivePostDataByConfirmPopup } = usePostDataByConfirmPopupHook({
-    message: 'hello',
-    url: '/wlekfj',
-    confirmBtnText: 'There',
-    cancelBtnText: 'Hello',
-    beforeCb: () => console.warn('called beforeCb'),
-    successCb: () => console.warn('called successCb'),
-    cancelBtnCb: () => console.warn('called cancelBtnCb'),
-    failCb: (code?: string, message?: string) => {
-      throw new ToastError('toast err');
-    },
-    errorPopupBtnCb: (code?: string) => console.warn('called errorPopupBtnCb'),
-  });
+function IndexCT({ uid }: IndexCTProps): React.JSX.Element {
+  const navigate = useNavigate();
+  const useSignOutHoot = useSignOut();
 
-  const { usePostData } = usePostDataHook({
-    url: '/welkjtl',
-  });
+  const handleMovePage = (path: string) => navigate(path);
 
-  const test = (p: string): Promise<string> =>
-    new Promise((resolve) => {
-      setTimeout(() => {
-        resolve(p);
-      }, 500);
-    });
-
-  const onClick = () => {
-    useSetActivePostDataByConfirmPopup({
-      a: 'a',
-      b: test('b'),
-      c: test('c'),
-    });
-  };
-
-  const handleGoBack = (data?: any) => {
-    console.warn('goBack visit? ', data);
-  };
-
-  const handleOnResult = (data?: any) => {
-    console.warn('onResult visit?', data);
-  };
-
-  useEffect(() => {
-    const customWindow = window as CustomWindow;
-    customWindow.goBack = handleGoBack;
-    customWindow.onResult = handleOnResult;
-
-    usePostData({
-      c: 'c',
-      d: handleParseDataFromJSInterface({
-        bridge: '',
-        action: '',
-      }),
-    });
-
-    return () => {
-      delete customWindow.goBack;
-      delete customWindow.onResult;
-    };
-  }, []);
-
-  return <IndexPT onClick={onClick} />;
+  return (
+    <IndexPT uid={uid} onSignOut={useSignOutHoot} onMovePage={handleMovePage} />
+  );
 }
 
-interface IndexCTProps extends CommonState {}
+interface IndexCTProps extends AuthState {}
 
 export default IndexCT;
